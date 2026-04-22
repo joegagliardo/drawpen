@@ -65,6 +65,7 @@ const Settings = (config) => {
   const [disableToolbarInPointerMode, setDisableToolbarInPointerMode] = useState(config.disable_toolbar_in_pointer_mode);
   const [autoDelete, setAutoDelete] = useState(config.auto_delete);
   const [toolbarDirection, setToolbarDirection] = useState(config.tool_bar_direction);
+  const [showWhiteboardDots, setShowWhiteboardDots] = useState(config.show_whiteboard_dots);
 
   const [showHideApp, setShowHideApp]               = useState({ accelerator: config.key_binding_show_hide_app,        init: config.key_binding_show_hide_app_default });
   const [showHideToolbar, setShowHideToolbar]       = useState({ accelerator: config.key_binding_show_hide_toolbar,    init: config.key_binding_show_hide_toolbar_default });
@@ -193,6 +194,12 @@ const Settings = (config) => {
 
     window.electronAPI.setToolBarDirection(nextDirection);
   };
+  
+  const toggleWhiteboardDots = () => {
+    const nextState = !showWhiteboardDots;
+    setShowWhiteboardDots(nextState);
+    window.electronAPI.setShowWhiteboardDots(nextState);
+  }
 
   const selectAppIconColor = (event) => {
     const iconColor = event.target.value;
@@ -485,6 +492,22 @@ const Settings = (config) => {
                       <div className="selectbar-arrow">
                         <IoChevronDown className="icon" />
                       </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="settings-item--nested">
+                  <div className="settings-item">
+                    <div className="settings-item--forward">
+                      <IoChevronForward className="icon" />
+                    </div>
+
+                    <div className="settings-item-info">
+                      <div className="settings-item-title">Whiteboard Grid</div>
+                      <div className="settings-item-description">Show grid dots on the whiteboard</div>
+                    </div>
+                    <div className="settings-item-control">
+                      <input type="checkbox" checked={showWhiteboardDots} onChange={toggleWhiteboardDots} />
                     </div>
                   </div>
                 </div>

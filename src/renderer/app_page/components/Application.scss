@@ -77,22 +77,30 @@ body {
         // https://www.magicpattern.design/tools/css-backgrounds
         &.whiteboard--white {
           background-color: #F5FAFF;
-          background-image: radial-gradient(#9D9D9D 1px, #F5FAFF 1px);
+          &.whiteboard--dots {
+            background-image: radial-gradient(#9D9D9D 1px, #F5FAFF 1px);
+          }
         }
 
         &.whiteboard--cream {
           background-color: #FFFCE8;
-          background-image: radial-gradient(#9D9D9D 1px, #FFFCE8 1px);
+          &.whiteboard--dots {
+            background-image: radial-gradient(#9D9D9D 1px, #FFFCE8 1px);
+          }
         }
 
         &.whiteboard--blue {
           background-color: #E5E5F7;
-          background-image: radial-gradient(#9D9D9D 1px, #E5E5F7 1px);
+          &.whiteboard--dots {
+            background-image: radial-gradient(#9D9D9D 1px, #E5E5F7 1px);
+          }
         }
 
         &.whiteboard--black {
           background-color: #282828;
-          background-image: radial-gradient(#9D9D9D 1px, #282828 1px);
+          &.whiteboard--dots {
+            background-image: radial-gradient(#9D9D9D 1px, #282828 1px);
+          }
         }
       }
 

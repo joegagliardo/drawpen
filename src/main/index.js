@@ -164,6 +164,10 @@ const schema = {
     enum: ['up', 'down', 'left', 'right'],
     default: 'down'
   },
+  show_whiteboard_dots: {
+    type: 'boolean',
+    default: true
+  },
 };
 
 // rawLog('[STORE PATH]:', app.getPath('userData') + '/config.json');
@@ -699,6 +703,7 @@ ipcMain.handle('get_settings', () => {
     laser_time: store.get('laser_time'),
     auto_delete: store.get('auto_delete'),
     tool_bar_direction: store.get('tool_bar_direction'),
+    show_whiteboard_dots: store.get('show_whiteboard_dots'),
 
     key_binding_show_hide_toolbar: normalizeAcceleratorForUI(store.get('key_binding_show_hide_toolbar')),
     key_binding_show_hide_whiteboard: normalizeAcceleratorForUI(store.get('key_binding_show_hide_whiteboard')),
@@ -795,6 +800,7 @@ ipcMain.handle('get_configuration', () => {
     starts_hidden: store.get('starts_hidden'),
     disable_toolbar_in_pointer_mode: store.get('disable_toolbar_in_pointer_mode'),
     tool_bar_direction: store.get('tool_bar_direction'),
+    show_whiteboard_dots: store.get('show_whiteboard_dots'),
     auto_delete: store.get('auto_delete'),
 
     key_binding_show_hide_app: normalizeAcceleratorForUI(store.get('key_binding_show_hide_app')),
@@ -1019,6 +1025,7 @@ function refreshSettingsInRenderer() {
     show_cute_cursor: store.get('show_cute_cursor'),
     swap_colors_indexes: store.get('swap_colors_indexes'),
     tool_bar_direction: direction,
+    show_whiteboard_dots: store.get('show_whiteboard_dots'),
     auto_delete: store.get('auto_delete'),
   })
 }
@@ -1534,6 +1541,15 @@ function launchTracker() {
 
 ipcMain.handle('set_tool_bar_direction', (_event, value) => {
   store.set('tool_bar_direction', value)
+
+  refreshSettingsInRenderer();
+
+  return null
+})
+
+
+ipcMain.handle('set_show_whiteboard_dots', (_event, value) => {
+  store.set('show_whiteboard_dots', value)
 
   refreshSettingsInRenderer();
 

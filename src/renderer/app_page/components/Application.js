@@ -142,6 +142,7 @@ const Application = (settings) => {
   const [isFadeDrawing, setIsFadeDrawing] = useState(false);
   const [showDrawingBorder, setShowDrawingBorder] = useState(initialShowDrawingBorder);
   const [showCuteCursor, setShowCuteCursor] = useState(initialShowCuteCursor);
+  const [showWhiteboardDots, setShowWhiteboardDots] = useState(settings.show_whiteboard_dots);
   const [autoDelete, setAutoDelete] = useState(settings.auto_delete);
   const [toolbarDirection, setToolbarDirection] = useState(settings.tool_bar_direction);
   const [mainColorIndex, setMainColorIndex] = useState(initialMainColorIndex);
@@ -1366,6 +1367,7 @@ const Application = (settings) => {
     setShowDrawingBorder(newSettings.show_drawing_border);
     setShowCuteCursor(newSettings.show_cute_cursor);
     setMainColorIndex(newSettings.swap_colors_indexes[0]);
+    setShowWhiteboardDots(newSettings.show_whiteboard_dots);
     setAutoDelete(newSettings.auto_delete);
     setToolbarDirection(newSettings.tool_bar_direction);
 
@@ -1465,7 +1467,7 @@ const Application = (settings) => {
 
       {
         showWhiteboard &&
-        <div id="whiteboard" className={`whiteboard--${whiteboardColor} whiteboard--size-${whiteboardSizePercent}`}></div>
+        <div id="whiteboard" className={`whiteboard--${whiteboardColor} whiteboard--size-${whiteboardSizePercent}${showWhiteboardDots ? " whiteboard--dots" : ""}`}></div>
       }
 
       {
