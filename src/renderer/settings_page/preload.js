@@ -23,6 +23,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   setFadeDisappearAfterMs: (value) => ipcRenderer.invoke('set_fade_disappear_after_ms', value),
   setFadeOutDurationTimeMs: (value) => ipcRenderer.invoke('set_fade_out_duration_time_ms', value),
   setAutoDelete: (value) => ipcRenderer.invoke('set_auto_delete', value),
+  setToolBarOrientation: (value) => ipcRenderer.invoke('set_tool_bar_orientation', value),
 
   isMac: platform === 'darwin',
 });

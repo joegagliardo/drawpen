@@ -51,6 +51,44 @@
         flex-direction: column;
       }
 
+      #toolbar.toolbar--horizontal {
+        flex-direction: row;
+        align-items: center;
+        height: var(--toolbar-width);
+
+        .toolbar__mode-switcher {
+          flex-direction: row;
+          width: auto;
+          height: 100%;
+          border-radius: 10px;
+          align-items: center;
+        }
+
+        .toolbar__draglines {
+          padding: 0 6px;
+          height: 100%;
+          display: flex;
+          align-items: center;
+        }
+
+        .draglines {
+          grid-template-columns: repeat(2, min-content);
+          grid-template-rows: repeat(3, min-content);
+        }
+
+        .toolbar__main-button {
+          padding: 0 10px;
+          height: 100%;
+          display: flex;
+          align-items: center;
+        }
+
+        .toolbar__close {
+          right: -5px;
+          top: -5px;
+        }
+      }
+
       .toolbar__close {
         position: absolute;
         top: -5px;

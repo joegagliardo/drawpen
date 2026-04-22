@@ -13,3 +13,9 @@ switchToDrawButtons.forEach(button => {
     window.electronAPI.invokeDrawMode();
   });
 });
+
+window.electronAPI.onRefreshSettings((_event, settings) => {
+  const orientation = settings.tool_bar_orientation;
+  toolbar.classList.remove('toolbar--vertical', 'toolbar--horizontal');
+  toolbar.classList.add(`toolbar--${orientation}`);
+});

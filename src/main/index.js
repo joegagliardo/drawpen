@@ -397,10 +397,14 @@ function createExtendedToolbarWindow() {
     hasDevTools = true
   }
 
+  const orientation = store.get('tool_bar_orientation');
+  const initialWidth = orientation === 'vertical' ? EXTENDED_TOOLBAR_WINDOW_WIDTH : EXTENDED_TOOLBAR_WINDOW_HEIGHT;
+  const initialHeight = orientation === 'vertical' ? EXTENDED_TOOLBAR_WINDOW_HEIGHT : EXTENDED_TOOLBAR_WINDOW_WIDTH;
+
   extendedToolbarWindow = new BrowserWindow({
     show: false,
-    width: EXTENDED_TOOLBAR_WINDOW_WIDTH,
-    height: EXTENDED_TOOLBAR_WINDOW_HEIGHT,
+    width: initialWidth,
+    height: initialHeight,
     transparent: true,
     backgroundColor: '#00000000', // 8-symbol ARGB
     resizable: false,
@@ -992,13 +996,25 @@ ipcMain.handle('set_auto_delete', (_event, value) => {
 });
 
 function refreshSettingsInRenderer() {
+  const orientation = store.get('tool_bar_orientation');
+
+  if (extendedToolbarWindow) {
+    const width = orientation === 'vertical' ? EXTENDED_TOOLBAR_WINDOW_WIDTH : EXTENDED_TOOLBAR_WINDOW_HEIGHT;
+    const height = orientation === 'vertical' ? EXTENDED_TOOLBAR_WINDOW_HEIGHT : EXTENDED_TOOLBAR_WINDOW_WIDTH;
+
+    extendedToolbarWindow.setSize(width, height);
+    extendedToolbarWindow.webContents.send('refresh_settings', {
+      tool_bar_orientation: orientation,
+    })
+  }
+
   mainWindow.webContents.send('refresh_settings', {
     whiteboard_color: store.get('whiteboard_color'),
     whiteboard_size_percent: store.get('whiteboard_size_percent'),
     show_drawing_border: store.get('show_drawing_border'),
     show_cute_cursor: store.get('show_cute_cursor'),
     swap_colors_indexes: store.get('swap_colors_indexes'),
-    tool_bar_orientation: store.get('tool_bar_orientation'),
+    tool_bar_orientation: orientation,
     auto_delete: store.get('auto_delete'),
   })
 }

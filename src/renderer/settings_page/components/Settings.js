@@ -64,6 +64,7 @@ const Settings = (config) => {
   const [startsHidden, setStartsHidden] = useState(config.starts_hidden);
   const [disableToolbarInPointerMode, setDisableToolbarInPointerMode] = useState(config.disable_toolbar_in_pointer_mode);
   const [autoDelete, setAutoDelete] = useState(config.auto_delete);
+  const [toolbarOrientation, setToolbarOrientation] = useState(config.tool_bar_orientation);
 
   const [showHideApp, setShowHideApp]               = useState({ accelerator: config.key_binding_show_hide_app,        init: config.key_binding_show_hide_app_default });
   const [showHideToolbar, setShowHideToolbar]       = useState({ accelerator: config.key_binding_show_hide_toolbar,    init: config.key_binding_show_hide_toolbar_default });
@@ -184,6 +185,13 @@ const Settings = (config) => {
     setAutoDelete(nextState);
 
     window.electronAPI.setAutoDelete(nextState);
+  };
+
+  const toggleToolbarOrientation = () => {
+    const nextState = toolbarOrientation === 'vertical' ? 'horizontal' : 'vertical';
+    setToolbarOrientation(nextState);
+
+    window.electronAPI.setToolBarOrientation(nextState);
   };
 
   const selectAppIconColor = (event) => {
@@ -426,6 +434,20 @@ const Settings = (config) => {
                     <div
                       className={`toggle ${disableToolbarInPointerMode ? 'active' : ''}`}
                       onClick={toggleDisableToolbarInPointerMode}
+                    ></div>
+                  </div>
+                </div>
+
+                <div className="settings-item">
+                  <div className="settings-item-info">
+                    <div className="settings-item-title">Horizontal Toolbar</div>
+                    <div className="settings-item-description">Switch between vertical and horizontal layout</div>
+                  </div>
+
+                  <div className="settings-item-control">
+                    <div
+                      className={`toggle ${toolbarOrientation === 'horizontal' ? 'active' : ''}`}
+                      onClick={toggleToolbarOrientation}
                     ></div>
                   </div>
                 </div>

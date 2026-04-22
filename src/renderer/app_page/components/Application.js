@@ -143,6 +143,7 @@ const Application = (settings) => {
   const [showDrawingBorder, setShowDrawingBorder] = useState(initialShowDrawingBorder);
   const [showCuteCursor, setShowCuteCursor] = useState(initialShowCuteCursor);
   const [autoDelete, setAutoDelete] = useState(settings.auto_delete);
+  const [toolbarOrientation, setToolbarOrientation] = useState(settings.tool_bar_orientation);
   const [mainColorIndex, setMainColorIndex] = useState(initialMainColorIndex);
   const [secondaryColorIndex, setSecondaryColorIndex] = useState(initialSecondaryColorIndex);
   const [toastInfo, setToastInfo] = useState(null);
@@ -610,6 +611,7 @@ const Application = (settings) => {
         tool_bar_collapsed: toolbarCollapsed,
         tool_bar_x: toolbarPosition.x,
         tool_bar_y: toolbarPosition.y,
+        tool_bar_orientation: toolbarOrientation,
       });
     }, 300);
 
@@ -1365,6 +1367,7 @@ const Application = (settings) => {
     setShowCuteCursor(newSettings.show_cute_cursor);
     setMainColorIndex(newSettings.swap_colors_indexes[0]);
     setAutoDelete(newSettings.auto_delete);
+    setToolbarOrientation(newSettings.tool_bar_orientation);
 
     console.log('New auto-delete setting received:', newSettings.auto_delete);
   };
@@ -1544,6 +1547,7 @@ const Application = (settings) => {
             handleEnablePointerMode={handleEnablePointerMode}
             showWhiteboard={showWhiteboard}
             handleToggleWhiteboard={handleToggleWhiteboard}
+            orientation={toolbarOrientation}
             Icons={Icons}
           />
       }
