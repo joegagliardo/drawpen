@@ -255,14 +255,15 @@ const ToolBar = ({
     >
       <div className="toolbar__mode-switcher">
         <div className="toolbar__draglines" onPointerDown={onPointerDown}>
-          <div className="draglines">
-            <div />
-            <div />
-            <div />
-            <div />
-            <div />
-            <div />
-          </div>
+          { (direction === 'up' || direction === 'left') ? (
+            <div className="expansion-arrow">
+              {direction === 'up' ? <Icons.AngleUp /> : <Icons.AngleLeft />}
+            </div>
+          ) : (
+            <div className="draglines">
+              <div /><div /><div /><div /><div /><div />
+            </div>
+          )}
         </div>
 
         <div className="toolbar__main-button">
@@ -272,14 +273,15 @@ const ToolBar = ({
         </div>
 
         <div className="toolbar__draglines" onPointerDown={onPointerDown}>
-          <div className="draglines">
-            <div />
-            <div />
-            <div />
-            <div />
-            <div />
-            <div />
-          </div>
+          { (direction === 'down' || direction === 'right') ? (
+            <div className="expansion-arrow">
+              {direction === 'down' ? <Icons.AngleDown /> : <Icons.AngleRight />}
+            </div>
+          ) : (
+            <div className="draglines">
+              <div /><div /><div /><div /><div /><div />
+            </div>
+          )}
         </div>
       </div>
 
