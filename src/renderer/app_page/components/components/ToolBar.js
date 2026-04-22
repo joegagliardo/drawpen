@@ -236,7 +236,25 @@ const ToolBar = ({
   };
 
   const handleToggleCollapsed = () => {
-    setIsCollapsed((prev) => !prev);
+    const nextCollapsed = !isCollapsed;
+    
+    // The difference between full and mini panels is 342px
+    const diff = 342;
+    
+    if (direction === 'up' || direction === 'left') {
+      let newX = position.x;
+      let newY = position.y;
+      
+      if (direction === 'up') {
+        newY = nextCollapsed ? position.y + diff : position.y - diff;
+      } else {
+        newX = nextCollapsed ? position.x + diff : position.x - diff;
+      }
+      
+      setPosition({ x: newX, y: newY });
+    }
+    
+    setIsCollapsed(nextCollapsed);
   };
 
   const isColorControlDisabled = ["laser", "eraser"].includes(activeTool);
@@ -246,7 +264,7 @@ const ToolBar = ({
     <aside
       id="toolbar"
       ref={toolbarRef}
-      className={`${toolbarSlide} toolbar--${direction} toolbar-orient--${orientation}${isCollapsed ? " toolbar--collapsed" : ""}`}
+      className={`${toolbarSlide} toolbar--${direction} toolbar-orient--${orientation}${isCollapsed ? " toolbar--collapsed" : ""}${dragging ? " toolbar--dragging" : ""}`}
       style={{ 
         left: position.x, 
         top: position.y,
