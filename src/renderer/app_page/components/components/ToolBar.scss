@@ -299,6 +299,20 @@
         &.color_yellow { background-color: var(--color-picker-yellow); }
         &.color_white { background-color: var(--color-picker-white); }
         &.color_black { background-color: var(--color-picker-black); }
+        &.color_clear {
+          background-color: #fff;
+          position: relative;
+          &::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background-color: #ff0000;
+            transform: translate(-50%, -50%) rotate(45deg);
+          }
+        }
         &.color_tool_laser { background-image: radial-gradient(circle, white 0%, red 100%); }
         &.color_tool_eraser { background-image: radial-gradient(circle, white 0%, dimgray 100%); }
       }
@@ -331,6 +345,20 @@
           &.color_yellow { background-color: var(--color-picker-yellow); }
           &.color_white { background-color: var(--color-picker-white); }
           &.color_black { background-color: var(--color-picker-black); }
+          &.color_clear {
+            background-color: #fff;
+            position: relative;
+            &::after {
+              content: "";
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              width: 100%;
+              height: 2px;
+              background-color: #ff0000;
+              transform: translate(-50%, -50%) rotate(45deg);
+            }
+          }
           &.color_tool_laser { background-image: radial-gradient(circle, white 0%, red 100%); }
           &.color_tool_eraser { background-image: radial-gradient(circle, white 0%, dimgray 100%); }
 

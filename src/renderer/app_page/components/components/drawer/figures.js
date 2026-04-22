@@ -114,7 +114,9 @@ const detectColorAndWidth = (ctx, figure, updateRainbowColorDeg) => {
     color = erasedFigureColor + fadeAlpha(eraserAlpha);
   }
 
-  return [color, width]
+  const isClear = colorList[colorIndex].name === 'color_clear';
+
+  return [color, width, isClear]
 }
 
 const detectColorAndFontSize = (ctx, figure, updateRainbowColorDeg) => {
@@ -140,7 +142,9 @@ const detectColorAndFontSize = (ctx, figure, updateRainbowColorDeg) => {
     color = erasedFigureColor + fadeAlpha(eraserAlpha);
   }
 
-  return [color, fontSize, font_y_offset_compensation]
+  const isClear = colorList[colorIndex].name === 'color_clear';
+
+  return [color, fontSize, font_y_offset_compensation, isClear]
 }
 
 export const getCursorColor = (colorIndex, rainbowColorDeg) => {
@@ -169,8 +173,16 @@ export const drawPen = (ctx, figure, fadeOpacity = 1) => {
 
   const path2DData = getPerfectPath2D(points, { size: widthInfo.pen_width });
 
-  ctx.fillStyle = penColor;
-  ctx.fill(path2DData);
+  if (colorInfo.name === 'color_clear') {
+    ctx.save();
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.fillStyle = '#000';
+    ctx.fill(path2DData);
+    ctx.restore();
+  } else {
+    ctx.fillStyle = penColor;
+    ctx.fill(path2DData);
+  }
 }
 
 export const drawRainbowPen = (ctx, offscreenCanvas, figure, updateRainbowColorDeg, fadeOpacity = 1) => {
@@ -251,8 +263,16 @@ export const drawHighlighter = (ctx, figure) => {
     thinning: 0.0
   });
 
-  ctx.fillStyle = highlighterColor;
-  ctx.fill(path2DData);
+  if (colorInfo.name === 'color_clear') {
+    ctx.save();
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.fillStyle = '#000';
+    ctx.fill(path2DData);
+    ctx.restore();
+  } else {
+    ctx.fillStyle = highlighterColor;
+    ctx.fill(path2DData);
+  }
 }
 
 export const drawRainbowHighlighter = (ctx, offscreenCanvas, figure, updateRainbowColorDeg) => {
@@ -281,17 +301,23 @@ export const drawArrow = (ctx, figure, updateRainbowColorDeg) => {
   const figurePoints = calcPointsArrow(points, widthIndex);
   const arcSegments = buildArrowArcSegments(figurePoints, widthIndex);
 
-  const [color] = detectColorAndWidth(ctx, figure, updateRainbowColorDeg)
+  const [color, , isClear] = detectColorAndWidth(ctx, figure, updateRainbowColorDeg)
   const shadowColor = '#222';
   const shadowBlur = 2;
   const shadowOffsetX = 1;
   const shadowOffsetY = 2;
 
-  ctx.fillStyle = color;
-  ctx.shadowColor = shadowColor;
-  ctx.shadowBlur = shadowBlur;
-  ctx.shadowOffsetX = shadowOffsetX;
-  ctx.shadowOffsetY = shadowOffsetY;
+  if (isClear) {
+    ctx.save();
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.fillStyle = '#000';
+  } else {
+    ctx.fillStyle = color;
+    ctx.shadowColor = shadowColor;
+    ctx.shadowBlur = shadowBlur;
+    ctx.shadowOffsetX = shadowOffsetX;
+    ctx.shadowOffsetY = shadowOffsetY;
+  }
 
   ctx.beginPath();
   ctx.moveTo(...figurePoints[0]);
@@ -309,8 +335,12 @@ export const drawArrow = (ctx, figure, updateRainbowColorDeg) => {
   ctx.closePath();
   ctx.fill();
 
-  ctx.shadowBlur = 0;
-  ctx.shadowColor = 'transparent'; // Reset shadows
+  if (isClear) {
+    ctx.restore();
+  } else {
+    ctx.shadowBlur = 0;
+    ctx.shadowColor = 'transparent'; // Reset shadows
+  }
 }
 
 export const drawArrowActive = (ctx, figure, hoveredDot) => {
@@ -318,12 +348,21 @@ export const drawArrowActive = (ctx, figure, hoveredDot) => {
 }
 
 export const drawFlatArrow = (ctx, figure, updateRainbowColorDeg) => {
-  const [color, width] = detectColorAndWidth(ctx, figure, updateRainbowColorDeg)
+  const [color, width, isClear] = detectColorAndWidth(ctx, figure, updateRainbowColorDeg)
   const segments = calcSegmentsFlatArrow(figure.points, figure.widthIndex)
 
+  if (isClear) {
+    ctx.save();
+    ctx.globalCompositeOperation = 'destination-out';
+  }
+
   segments.forEach(([pointA, pointB]) => {
-    drawLineSkeleton(ctx, pointA, pointB, color, width)
+    drawLineSkeleton(ctx, pointA, pointB, isClear ? '#000' : color, width)
   })
+
+  if (isClear) {
+    ctx.restore();
+  }
 }
 
 export const drawFlatArrowActive = (ctx, figure, hoveredDot) => {
@@ -332,9 +371,18 @@ export const drawFlatArrowActive = (ctx, figure, hoveredDot) => {
 
 export const drawLine = (ctx, figure, updateRainbowColorDeg) => {
   const { points: [pointA, pointB] } = figure
-  const [color, width] = detectColorAndWidth(ctx, figure, updateRainbowColorDeg)
+  const [color, width, isClear] = detectColorAndWidth(ctx, figure, updateRainbowColorDeg)
 
-  drawLineSkeleton(ctx, pointA, pointB, color, width)
+  if (isClear) {
+    ctx.save();
+    ctx.globalCompositeOperation = 'destination-out';
+  }
+
+  drawLineSkeleton(ctx, pointA, pointB, isClear ? '#000' : color, width)
+
+  if (isClear) {
+    ctx.restore();
+  }
 }
 
 export const drawLineActive = (ctx, figure, hoveredDot) => {
@@ -362,9 +410,18 @@ const drawLineSkeleton = (ctx, pointA, pointB, color, width) => {
 
 export const drawOval = (ctx, figure, updateRainbowColorDeg, isShiftPressed = false) => {
   const { points: [pointA, pointB] } = figure
-  const [color, width] = detectColorAndWidth(ctx, figure, updateRainbowColorDeg)
+  const [color, width, isClear] = detectColorAndWidth(ctx, figure, updateRainbowColorDeg)
 
-  drawOvalSkeleton(ctx, pointA, pointB, color, width, isShiftPressed)
+  if (isClear) {
+    ctx.save();
+    ctx.globalCompositeOperation = 'destination-out';
+  }
+
+  drawOvalSkeleton(ctx, pointA, pointB, isClear ? '#000' : color, width, isShiftPressed)
+
+  if (isClear) {
+    ctx.restore();
+  }
 }
 
 export const drawOvalActive = (ctx, figure, hoveredDot, isShiftPressed = false) => {
@@ -402,9 +459,18 @@ const drawOvalSkeleton = (ctx, pointA, pointB, color, width, isShiftPressed) => 
 
 export const drawOvalFilled = (ctx, figure, updateRainbowColorDeg, isShiftPressed = false) => {
   const { points: [pointA, pointB] } = figure
-  const [color, width] = detectColorAndWidth(ctx, figure, updateRainbowColorDeg)
+  const [color, width, isClear] = detectColorAndWidth(ctx, figure, updateRainbowColorDeg)
 
-  drawOvalFilledSkeleton(ctx, pointA, pointB, color, width, isShiftPressed)
+  if (isClear) {
+    ctx.save();
+    ctx.globalCompositeOperation = 'destination-out';
+  }
+
+  drawOvalFilledSkeleton(ctx, pointA, pointB, isClear ? '#000' : color, width, isShiftPressed)
+
+  if (isClear) {
+    ctx.restore();
+  }
 }
 
 export const drawOvalFilledActive = (ctx, figure, hoveredDot, isShiftPressed = false) => {
@@ -441,9 +507,18 @@ const drawOvalFilledSkeleton = (ctx, pointA, pointB, color, width, isShiftPresse
 
 export const drawRectangle = (ctx, figure, updateRainbowColorDeg, isShiftPressed = false) => {
   const { points: [pointA, pointB] } = figure
-  const [color, width] = detectColorAndWidth(ctx, figure, updateRainbowColorDeg)
+  const [color, width, isClear] = detectColorAndWidth(ctx, figure, updateRainbowColorDeg)
 
-  drawRectangleSkeleton(ctx, pointA, pointB, color, width, isShiftPressed)
+  if (isClear) {
+    ctx.save();
+    ctx.globalCompositeOperation = 'destination-out';
+  }
+
+  drawRectangleSkeleton(ctx, pointA, pointB, isClear ? '#000' : color, width, isShiftPressed)
+
+  if (isClear) {
+    ctx.restore();
+  }
 }
 
 export const drawRectangleActive = (ctx, figure, hoveredDot, isShiftPressed = false) => {
@@ -493,9 +568,18 @@ const drawRectangleSkeleton = (ctx, pointA, pointB, color, width, isShiftPressed
 
 export const drawRectangleFilled = (ctx, figure, updateRainbowColorDeg, isShiftPressed = false) => {
   const { points: [pointA, pointB] } = figure
-  const [color, width] = detectColorAndWidth(ctx, figure, updateRainbowColorDeg)
+  const [color, width, isClear] = detectColorAndWidth(ctx, figure, updateRainbowColorDeg)
 
-  drawRectangleFilledSkeleton(ctx, pointA, pointB, color, width, isShiftPressed)
+  if (isClear) {
+    ctx.save();
+    ctx.globalCompositeOperation = 'destination-out';
+  }
+
+  drawRectangleFilledSkeleton(ctx, pointA, pointB, isClear ? '#000' : color, width, isShiftPressed)
+
+  if (isClear) {
+    ctx.restore();
+  }
 }
 
 export const drawRectangleFilledActive = (ctx, figure, hoveredDot, isShiftPressed = false) => {
@@ -595,9 +679,18 @@ export const drawEraserTail = (ctx, figure) => {
 export const drawText = (ctx, figure, updateRainbowColorDeg, isActive, hoveredDot) => {
   const { points: [startAt], text, scale, width, height } = figure;
 
-  const [color, fontSize, font_y_offset_compensation] = detectColorAndFontSize(ctx, figure, updateRainbowColorDeg)
+  const [color, fontSize, font_y_offset_compensation, isClear] = detectColorAndFontSize(ctx, figure, updateRainbowColorDeg)
 
-  drawTextSkeleton(ctx, startAt, text, color, fontSize, font_y_offset_compensation, scale)
+  if (isClear) {
+    ctx.save();
+    ctx.globalCompositeOperation = 'destination-out';
+  }
+
+  drawTextSkeleton(ctx, startAt, text, isClear ? '#000' : color, fontSize, font_y_offset_compensation, scale)
+
+  if (isClear) {
+    ctx.restore();
+  }
 
   if (isActive) {
     const [startX, startY] = startAt;

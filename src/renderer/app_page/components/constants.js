@@ -44,6 +44,7 @@ export const colorList = [
   { color: '#A552E0', name: 'color_purple' },
   { color: '#1E1E1E', name: 'color_black' },
   { color: '#FFFFFF', name: 'color_white' },
+  { color: 'transparent', name: 'color_clear' },
 ];
 
 // - font_y_offset_compensation: Hack to make HTML similar to Canvas

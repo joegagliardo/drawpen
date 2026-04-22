@@ -34,6 +34,12 @@ const CuteCursor = ({
       };
     }
 
+    if (colorList[activeColorIndex].name === "color_clear") {
+      iconProps.fill = '#EEE';
+      iconProps.stroke = '#FF0000';
+      iconProps.strokeWidth = "30";
+    }
+
     const monochromeIconProps = {
       size: iconSize,
       fill: '#333',
