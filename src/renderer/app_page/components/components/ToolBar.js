@@ -3,7 +3,7 @@ import "./ToolBar.scss";
 import { brushList, shapeList, colorList, widthList } from "../constants.js";
 
 const STICKY_DISTANCE = 15;
-const ZONE_BORDER = 10; // Equals to "--border-size"*2
+const ZONE_BORDER = 1; // Minimum distance from screen edges
 
 const ToolBar = ({
   position,
