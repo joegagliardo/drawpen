@@ -396,16 +396,25 @@ const ToolBar = ({
 
           <div className="side-view-body width-group">
             <div className="toolbar__width-slider-container">
-              <input
-                type="range"
-                min="0"
-                max="5"
-                step="0.1"
-                value={activeWidthIndex}
-                onChange={(e) => handleChangeWidth(parseFloat(e.target.value))}
-                onPointerUp={() => setToolbarSlide("main-slide")}
-                className="toolbar__width-slider"
-              />
+              <div className="toolbar__width-triangle">
+                {[...Array(10)].map((_, i) => {
+                  const val = (i / 9) * 5;
+                  const isActive = Math.round(activeWidthIndex * 1.8) === i; // Map 0-5 to 0-9
+                  return (
+                    <div
+                      key={i}
+                      className={`toolbar__width-segment ${isActive ? "active" : ""}`}
+                      style={{
+                        "--segment-width": `${4 + i * 3}px`,
+                      }}
+                      onClick={() => {
+                        handleChangeWidth(val);
+                        setToolbarSlide("main-slide");
+                      }}
+                    />
+                  );
+                })}
+              </div>
             </div>
           </div>
           </div>
