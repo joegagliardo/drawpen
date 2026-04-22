@@ -9,6 +9,7 @@ BLUE='\033[0;34m'
 GREEN='\033[0;32m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
+npm run sync-version
 
 function show_help() {
     echo "Usage: ./build.sh [option]"

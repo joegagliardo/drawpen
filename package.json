@@ -1,7 +1,7 @@
 {
   "name": "drawpen",
   "productName": "DrawPen",
-  "version": "0.1.47",
+  "version": "0.0.04",
   "description": "DrawPen is a screen annotation tool built with web technology",
   "appId": "dmytro.vasin.drawpen",
   "author": {
@@ -16,6 +16,9 @@
   "license": "MIT",
   "main": ".webpack/main",
   "scripts": {
+    "sync-version": "node tools/generate-version.js",
+    "prestart": "npm run sync-version",
+    "prepackage": "npm run sync-version",
     "start": "NODE_ENV=development electron-forge start",
     "package_no_sign": "electron-forge package -- --no-sign",
     "package": "electron-forge package",

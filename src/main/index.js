@@ -698,6 +698,7 @@ ipcMain.handle('get_settings', () => {
     fade_out_duration_time_ms: store.get('fade_out_duration_time_ms'),
     laser_time: store.get('laser_time'),
     auto_delete: store.get('auto_delete'),
+    tool_bar_direction: store.get('tool_bar_direction'),
 
     key_binding_show_hide_toolbar: normalizeAcceleratorForUI(store.get('key_binding_show_hide_toolbar')),
     key_binding_show_hide_whiteboard: normalizeAcceleratorForUI(store.get('key_binding_show_hide_whiteboard')),
