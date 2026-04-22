@@ -64,7 +64,7 @@ const Settings = (config) => {
   const [startsHidden, setStartsHidden] = useState(config.starts_hidden);
   const [disableToolbarInPointerMode, setDisableToolbarInPointerMode] = useState(config.disable_toolbar_in_pointer_mode);
   const [autoDelete, setAutoDelete] = useState(config.auto_delete);
-  const [toolbarOrientation, setToolbarOrientation] = useState(config.tool_bar_orientation);
+  const [toolbarDirection, setToolbarDirection] = useState(config.tool_bar_direction);
 
   const [showHideApp, setShowHideApp]               = useState({ accelerator: config.key_binding_show_hide_app,        init: config.key_binding_show_hide_app_default });
   const [showHideToolbar, setShowHideToolbar]       = useState({ accelerator: config.key_binding_show_hide_toolbar,    init: config.key_binding_show_hide_toolbar_default });
@@ -187,11 +187,11 @@ const Settings = (config) => {
     window.electronAPI.setAutoDelete(nextState);
   };
 
-  const toggleToolbarOrientation = () => {
-    const nextState = toolbarOrientation === 'vertical' ? 'horizontal' : 'vertical';
-    setToolbarOrientation(nextState);
+  const handleToolbarDirectionChange = (event) => {
+    const nextDirection = event.target.value;
+    setToolbarDirection(nextDirection);
 
-    window.electronAPI.setToolBarOrientation(nextState);
+    window.electronAPI.setToolBarDirection(nextDirection);
   };
 
   const selectAppIconColor = (event) => {
@@ -440,15 +440,27 @@ const Settings = (config) => {
 
                 <div className="settings-item">
                   <div className="settings-item-info">
-                    <div className="settings-item-title">Horizontal Toolbar</div>
-                    <div className="settings-item-description">Switch between vertical and horizontal layout</div>
+                    <div className="settings-item-title">Toolbar Expansion Direction</div>
+                    <div className="settings-item-description">Direction in which the toolbar will expand</div>
                   </div>
 
                   <div className="settings-item-control">
-                    <div
-                      className={`toggle ${toolbarOrientation === 'horizontal' ? 'active' : ''}`}
-                      onClick={toggleToolbarOrientation}
-                    ></div>
+                    <div className="selectbar-container">
+                      <select
+                        className="selectbar"
+                        value={toolbarDirection}
+                        onChange={handleToolbarDirectionChange}
+                      >
+                        <option value="up">Up (Vertical)</option>
+                        <option value="down">Down (Vertical)</option>
+                        <option value="left">Left (Horizontal)</option>
+                        <option value="right">Right (Horizontal)</option>
+                      </select>
+
+                      <div className="selectbar-arrow">
+                        <IoChevronDown className="icon" />
+                      </div>
+                    </div>
                   </div>
                 </div>
 

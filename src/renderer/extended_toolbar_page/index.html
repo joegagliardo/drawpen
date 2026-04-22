@@ -48,10 +48,34 @@
 
       #toolbar {
         display: flex;
-        flex-direction: column;
       }
 
-      #toolbar.toolbar--horizontal {
+      #toolbar.toolbar-orient--vertical {
+        flex-direction: column;
+        width: var(--toolbar-width);
+
+        .toolbar__mode-switcher {
+          flex-direction: column;
+          width: var(--toolbar-width);
+          height: auto;
+          border-radius: 10px;
+        }
+
+        .toolbar__draglines {
+          padding: 4px 0;
+        }
+
+        .draglines {
+          grid-template-columns: repeat(3, min-content);
+          grid-template-rows: repeat(2, min-content);
+        }
+
+        .toolbar__main-button {
+          padding: 10px 0;
+        }
+      }
+
+      #toolbar.toolbar-orient--horizontal {
         flex-direction: row;
         align-items: center;
         height: var(--toolbar-width);
@@ -82,11 +106,23 @@
           display: flex;
           align-items: center;
         }
+      }
 
-        .toolbar__close {
-          right: -5px;
-          top: -5px;
-        }
+      #toolbar.toolbar--down { 
+        flex-direction: column; 
+        .toolbar__mode-switcher { border-top-left-radius: 10px; border-top-right-radius: 10px; }
+      }
+      #toolbar.toolbar--up   { 
+        flex-direction: column-reverse; 
+        .toolbar__mode-switcher { border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; }
+      }
+      #toolbar.toolbar--right { 
+        flex-direction: row; 
+        .toolbar__mode-switcher { border-top-left-radius: 10px; border-bottom-left-radius: 10px; }
+      }
+      #toolbar.toolbar--left  { 
+        flex-direction: row-reverse; 
+        .toolbar__mode-switcher { border-top-right-radius: 10px; border-bottom-right-radius: 10px; }
       }
 
       .toolbar__close {
@@ -113,19 +149,15 @@
 
       .toolbar__mode-switcher {
         display: flex;
-        flex-direction: column;
         align-items: center;
-        width: var(--toolbar-width);
         box-sizing: border-box;
         background-color: var(--toolbar-background-color);
         border: 1px solid var(--toolbar-border-color);
-        border-radius: 10px;
       }
 
       .toolbar__main-button {
         display: flex;
         justify-content: center;
-        padding: 10px 0;
       }
 
       .toolbar__main-button button {
@@ -141,7 +173,6 @@
 
       .toolbar__draglines {
         display: flex;
-        padding: 4px 0;
         justify-content: center;
         align-items: center;
       }
@@ -150,7 +181,6 @@
         display: grid;
         row-gap: 2px;
         column-gap: 2px;
-        grid-template-columns: repeat(3, min-content);
       }
 
       .draglines div {
@@ -165,7 +195,7 @@
   </head>
 
   <body>
-    <aside id="toolbar" class="toolbar-extended">
+    <aside id="toolbar" class="toolbar--down toolbar-orient--vertical toolbar-extended">
       <div class="toolbar__mode-switcher">
         <div class="toolbar__draglines">
           <div class="draglines">

@@ -15,7 +15,8 @@ switchToDrawButtons.forEach(button => {
 });
 
 window.electronAPI.onRefreshSettings((_event, settings) => {
-  const orientation = settings.tool_bar_orientation;
-  toolbar.classList.remove('toolbar--vertical', 'toolbar--horizontal');
-  toolbar.classList.add(`toolbar--${orientation}`);
+  const direction = settings.tool_bar_direction;
+  const orientation = ['up', 'down'].includes(direction) ? 'vertical' : 'horizontal';
+  toolbar.classList.remove('toolbar--up', 'toolbar--down', 'toolbar--left', 'toolbar--right', 'toolbar-orient--vertical', 'toolbar-orient--horizontal');
+  toolbar.classList.add(`toolbar--${direction}`, `toolbar-orient--${orientation}`);
 });

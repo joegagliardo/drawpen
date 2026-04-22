@@ -25,9 +25,10 @@ const ToolBar = ({
   handleEnablePointerMode,
   showWhiteboard,
   handleToggleWhiteboard,
-  orientation,
+  direction,
   Icons,
 }) => {
+  const orientation = ['up', 'down'].includes(direction) ? 'vertical' : 'horizontal';
   const allIcons = {
     pen: <Icons.Brush />,
     fadepen: <Icons.MagicBrush />,
@@ -245,7 +246,7 @@ const ToolBar = ({
     <aside
       id="toolbar"
       ref={toolbarRef}
-      className={`${toolbarSlide} toolbar--${orientation}${isCollapsed ? " toolbar--collapsed" : ""}`}
+      className={`${toolbarSlide} toolbar--${direction} toolbar-orient--${orientation}${isCollapsed ? " toolbar--collapsed" : ""}`}
       style={{ 
         left: position.x, 
         top: position.y,
@@ -443,9 +444,10 @@ const ToolBar = ({
 
       <div className="toolbar__slider" onClick={handleToggleCollapsed}>
         {
-          orientation === 'vertical' 
-            ? (isCollapsed ? <Icons.AngleDown /> : <Icons.AngleUp />)
-            : (isCollapsed ? <Icons.AngleRight /> : <Icons.AngleLeft />)
+          direction === 'down' ? (isCollapsed ? <Icons.AngleDown /> : <Icons.AngleUp />) :
+          direction === 'up'   ? (isCollapsed ? <Icons.AngleUp />   : <Icons.AngleDown />) :
+          direction === 'right' ? (isCollapsed ? <Icons.AngleRight /> : <Icons.AngleLeft />) :
+          direction === 'left'  ? (isCollapsed ? <Icons.AngleLeft />  : <Icons.AngleRight />) : null
         }
       </div>
 

@@ -159,9 +159,10 @@ const schema = {
     type: 'boolean',
     default: true
   },
-  tool_bar_orientation: {
+  tool_bar_direction: {
     type: 'string',
-    default: 'vertical'
+    enum: ['up', 'down', 'left', 'right'],
+    default: 'down'
   },
 };
 
@@ -397,9 +398,10 @@ function createExtendedToolbarWindow() {
     hasDevTools = true
   }
 
-  const orientation = store.get('tool_bar_orientation');
-  const initialWidth = orientation === 'vertical' ? EXTENDED_TOOLBAR_WINDOW_WIDTH : EXTENDED_TOOLBAR_WINDOW_HEIGHT;
-  const initialHeight = orientation === 'vertical' ? EXTENDED_TOOLBAR_WINDOW_HEIGHT : EXTENDED_TOOLBAR_WINDOW_WIDTH;
+  const direction = store.get('tool_bar_direction');
+  const isVertical = ['up', 'down'].includes(direction);
+  const initialWidth = isVertical ? EXTENDED_TOOLBAR_WINDOW_WIDTH : EXTENDED_TOOLBAR_WINDOW_HEIGHT;
+  const initialHeight = isVertical ? EXTENDED_TOOLBAR_WINDOW_HEIGHT : EXTENDED_TOOLBAR_WINDOW_WIDTH;
 
   extendedToolbarWindow = new BrowserWindow({
     show: false,
@@ -791,7 +793,7 @@ ipcMain.handle('get_configuration', () => {
     launch_on_login: store.get('launch_on_login'),
     starts_hidden: store.get('starts_hidden'),
     disable_toolbar_in_pointer_mode: store.get('disable_toolbar_in_pointer_mode'),
-    tool_bar_orientation: store.get('tool_bar_orientation'),
+    tool_bar_direction: store.get('tool_bar_direction'),
     auto_delete: store.get('auto_delete'),
 
     key_binding_show_hide_app: normalizeAcceleratorForUI(store.get('key_binding_show_hide_app')),
@@ -996,15 +998,16 @@ ipcMain.handle('set_auto_delete', (_event, value) => {
 });
 
 function refreshSettingsInRenderer() {
-  const orientation = store.get('tool_bar_orientation');
+  const direction = store.get('tool_bar_direction');
+  const isVertical = ['up', 'down'].includes(direction);
 
   if (extendedToolbarWindow) {
-    const width = orientation === 'vertical' ? EXTENDED_TOOLBAR_WINDOW_WIDTH : EXTENDED_TOOLBAR_WINDOW_HEIGHT;
-    const height = orientation === 'vertical' ? EXTENDED_TOOLBAR_WINDOW_HEIGHT : EXTENDED_TOOLBAR_WINDOW_WIDTH;
+    const width = isVertical ? EXTENDED_TOOLBAR_WINDOW_WIDTH : EXTENDED_TOOLBAR_WINDOW_HEIGHT;
+    const height = isVertical ? EXTENDED_TOOLBAR_WINDOW_HEIGHT : EXTENDED_TOOLBAR_WINDOW_WIDTH;
 
     extendedToolbarWindow.setSize(width, height);
     extendedToolbarWindow.webContents.send('refresh_settings', {
-      tool_bar_orientation: orientation,
+      tool_bar_direction: direction,
     })
   }
 
@@ -1014,7 +1017,7 @@ function refreshSettingsInRenderer() {
     show_drawing_border: store.get('show_drawing_border'),
     show_cute_cursor: store.get('show_cute_cursor'),
     swap_colors_indexes: store.get('swap_colors_indexes'),
-    tool_bar_orientation: orientation,
+    tool_bar_direction: direction,
     auto_delete: store.get('auto_delete'),
   })
 }
@@ -1528,8 +1531,8 @@ function launchTracker() {
   } catch (_) { }
 }
 
-ipcMain.handle('set_tool_bar_orientation', (_event, value) => {
-  store.set('tool_bar_orientation', value)
+ipcMain.handle('set_tool_bar_direction', (_event, value) => {
+  store.set('tool_bar_direction', value)
 
   refreshSettingsInRenderer();
 
